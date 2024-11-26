@@ -1,120 +1,171 @@
-//Uso de la librerias Mao, HashMap para almacenar las estadisticas por materia 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class SistemaAcademico {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        int numEstudiantes,cedula,total;
-        double acd, ape, aa;
-        // Estudiantes por paralelo 
-        System.out.print("Ingrese el numero de estudiantes en el curso: ");
-        numEstudiantes = input.nextInt();    
-        // Mapa para almacenar las estadísticas por materia
-        Map<String, int[]> estadisticasPorMateria = new HashMap<>();
-
+        int numEstudiantes, cedula;
+        double acd, ape, aa, promedio;
+        int totalAprobados = 0, totalAprobadosRecuperacion = 0, totalReprobados = 0;
+        String estado;
         
+        //número de estudiantes
+        System.out.print("Ingrese el numero de estudiantes en el curso: ");
+        numEstudiantes = input.nextInt();
+        
+        //encabezado del reporte
+        String reporte = String.format("%-20s %-20s %-10s %-10s %-10s\n", 
+                                      "Estudiante", "Materia", "Promedio", "Estado", "Cedula");
 
+        // Iteración sobre cada estudiante
         for (int i = 1; i <= numEstudiantes; i++) {
-            //Ingreso de datos de identificacion
-            input.nextLine(); 
+            input.nextLine(); // Consumir salto de línea pendiente
             System.out.print("\nIngrese el nombre del estudiante: ");
             String nombre = input.nextLine();
 
             System.out.print("Ingrese el apellido del estudiante: ");
             String apellido = input.nextLine();
 
-            System.out.print("Ingrese la cédula del estudiante: ");
+            System.out.print("Ingrese la cedula del estudiante: ");
             cedula = input.nextInt();
 
-            input.nextLine(); 
+            input.nextLine(); // Consumir salto de línea pendiente
             System.out.print("Ingrese la materia: ");
             String materia = input.nextLine();
 
-            // Ingreso de notas
-            do {
-                System.out.print("Ingrese la calificacion de ACD (3.5/10): ");
+            // Solicitar las notas de cada materia
+            System.out.printf("Ingrese la calificacion de ACD (3.5/10): ");
+            acd = input.nextDouble();
+            while (acd < 0 || acd > 3.5) {
+                System.out.println("Nota invalida. Ingrese un valor entre 0 y 3.5.");
+                System.out.printf("Ingrese la calificacion de ACD (3.5/10): ");
                 acd = input.nextDouble();
-                if (acd < 0 || acd > 3.5) {
-                    System.out.println("Nota invalida. Ingrese una nota entre 0 y 3.5.");
-                }
-            } while (acd < 0 || acd > 3.5);
+            }
 
-            do {
-                System.out.print("Ingrese la calificacian de APE (3.5/10): ");
+            System.out.printf("Ingrese la calificacion de APE (3.5/10): ");
+            ape = input.nextDouble();
+            while (ape < 0 || ape > 3.5) {
+                System.out.println("Nota invalida. Ingrese un valor entre 0 y 3.5.");
+                System.out.printf("Ingrese la calificacion de APE (3.5/10): ");
                 ape = input.nextDouble();
-                if (ape < 0 || ape > 3.5) {
-                    System.out.println("Nota invalida. Ingrese una nota entre 0 y 3.5.");
-                }
-            } while (ape < 0 || ape > 3.5);
+            }
 
-            do {
-                System.out.print("Ingrese la calificacian de AA (3/10): ");
+            System.out.printf("Ingrese la calificacion de AA (3.0/10): ");
+            aa = input.nextDouble();
+            while (aa < 0 || aa > 3.0) {
+                System.out.println("Nota invalida. Ingrese un valor entre 0 y 3.0.");
+                System.out.printf("Ingrese la calificacion de AA (3.0/10): ");
                 aa = input.nextDouble();
-                if (aa < 0 || aa > 3.0) {
-                    System.out.println("Nota invalida. Ingrese una nota entre 0 y 3.0.");
-                }
-            } while (aa < 0 || aa > 3.0);
+            }
 
-            // Calcular el promedio 
-            double promedio = acd + ape + aa;
-            String estado;
-
-            //Verificacion de estado
+            // Calcular promedio
+            promedio = acd + ape + aa;
+            
+            // Verificar estado
             if (promedio >= 7.0) {
                 estado = "Aprobado";
+                totalAprobados++;
             } else {
-                System.out.println("\nEl estudiante no ha aprobado y debe rendir un examen de recuperacion.");
-                System.out.printf("Ingrese la nota de recuperación para %s %s (máximo 3.5): ", nombre, apellido);
-                double recu;
-                do {
+                System.out.printf("\nEl estudiante %s %s no ha aprobado. Debe rendir un examen de recuperacion.\n", nombre, apellido);
+                double recu = 0;
+                System.out.printf("Ingrese la calificacion de recuperacion (3.5/10): ");
+                recu = input.nextDouble();
+                while (recu < 0 || recu > 3.5) {
+                    System.out.println("Nota invalida. Ingrese un valor entre 0 y 3.5.");
+                    System.out.printf("Ingrese la calificación de recuperacion (3.5/10): ");
                     recu = input.nextDouble();
-                    if (recu < 0 || recu > 3.5) {
-                        System.out.print("Nota inválida. Ingrese un valor entre 0 y 3.5: ");
-                    }
-                } while (recu < 0 || recu > 3.5);
-                // Recalcular promedio
-                promedio = promedio * 0.6 + recu; 
-                estado = (promedio >= 7.0) ? "Aprobado (tras recuperacion)" : "Reprobado";
+                }
+
+                // Promedio con recuperación
+                promedio = promedio * 0.6 + recu;
+                if (promedio >= 7.0) {
+                    estado = "Aprobado (tras recuperacion)";
+                    totalAprobadosRecuperacion++;
+                } else {
+                    estado = "Reprobado";
+                    totalReprobados++;
+                }
             }
 
-            // Actualizar las estadísticas por materia
-            int[] estadisticas = estadisticasPorMateria.getOrDefault(materia, new int[3]);
-            if (estado.startsWith("Aprobado")) {
-                estadisticas[0]++; 
-            } else if (estado.startsWith("Aprobado (tras recuperación)")) {
-                estadisticas[1]++; 
-            } else {
-                estadisticas[2]++; 
-            }
-            estadisticasPorMateria.put(materia, estadisticas);   
-
-            //Carpinteria de salida
-            System.out.println("\nResultados del curso:");
-            System.out.println("=====================================================");
-            System.out.printf("%-10s %-25s %-15s %-10s %-10s\n", "Cédula", "Nombre", "Materia", "Promedio", "Estado");
-            System.out.println("=====================================================");
-            System.out.printf("%-10d %-25s %-15s %-10.2f %-10s\n", cedula, nombre + " " + apellido, materia, promedio, estado);
+            reporte += String.format("%-20s %-20s %-10.2f %-10s %-10d\n", 
+                                    nombre + " " + apellido, materia, promedio, estado, cedula);
         }
 
-        // Estadisticas
+        // eporte final
         System.out.println("\n=====================================================");
-        System.out.println("Estadísticas por materia:");
+        System.out.println("Estadisticas generales del curso:");
         System.out.println("=====================================================");
-        
-        for (Map.Entry<String, int[]> entry : estadisticasPorMateria.entrySet()) {
-            String materia = entry.getKey();
-            int[] estadisticas = entry.getValue();
-            total = estadisticas[0] + estadisticas[1] + estadisticas[2];
+        reporte += String.format("\nTotal de Aprobados: %d\n", totalAprobados);
+        reporte += String.format("Total de Aprobados con recuperacion: %d\n", totalAprobadosRecuperacion);
+        reporte += String.format("Total de Reprobados: %d\n", totalReprobados);
 
-            System.out.println("\nMateria: " + materia);
-            System.out.printf("Total de estudiantes: %d\n", total);
-            System.out.printf("Aprobados: %d (%.2f%%)\n", estadisticas[0], (estadisticas[0] * 100.0) / total);
-            System.out.printf("Aprobados con recuperación: %d (%.2f%%)\n", estadisticas[1], (estadisticas[1] * 100.0) / total);
-            System.out.printf("Reprobados: %d (%.2f%%)\n", estadisticas[2], (estadisticas[2] * 100.0) / total);
-        }
-        System.out.println("=====================================================");
-
+        // Imprimir todo el reporte
+        System.out.println(reporte);
     }
 }
+/***
+ * Ingrese el numero de estudiantes en el curso: 5
+
+Ingrese el nombre del estudiante: Martin
+Ingrese el apellido del estudiante: Martin
+Ingrese la cedula del estudiante: 100001
+Ingrese la materia: Fisica
+Ingrese la calificacion de ACD (3.5/10): 3,3
+Ingrese la calificacion de APE (3.5/10): 2,3
+Ingrese la calificacion de AA (3.0/10): 1,5
+
+Ingrese el nombre del estudiante: Alex
+Ingrese el apellido del estudiante: Martin
+Ingrese la cedula del estudiante: 100002
+Ingrese la materia: Fisica
+Ingrese la calificacion de ACD (3.5/10): 3
+Ingrese la calificacion de APE (3.5/10): 2
+Ingrese la calificacion de AA (3.0/10): 1
+
+El estudiante Alex Martin no ha aprobado. Debe rendir un examen de recuperaci0n.
+Ingrese la calificacion de recuperacion (3.5/10): 3
+
+Ingrese el nombre del estudiante: Camila
+Ingrese el apellido del estudiante: Rojas
+Ingrese la cedula del estudiante: 100003
+Ingrese la materia: Quimica
+Ingrese la calificacion de ACD (3.5/10): 3,4
+Ingrese la calificacion de APE (3.5/10): 2,3
+Ingrese la calificacion de AA (3.0/10): 0,9
+
+El estudiante Camila Rojas no ha aprobado. Debe rendir un examen de recuperacion.
+Ingrese la calificacion de recuperacion (3.5/10): 3
+
+Ingrese el nombre del estudiante: Rocio
+Ingrese el apellido del estudiante: Alba
+Ingrese la cedula del estudiante: 100004
+Ingrese la materia: Quimica
+Ingrese la calificacion de ACD (3.5/10): 3
+Ingrese la calificacion de APE (3.5/10): 3
+Ingrese la calificacion de AA (3.0/10): 2
+
+Ingrese el nombre del estudiante: Daniel
+Ingrese el apellido del estudiante: Pintado
+Ingrese la cedula del estudiante: 100005
+Ingrese la materia: Fisica
+Ingrese la calificacion de ACD (3.5/10): 3
+Ingrese la calificacion de APE (3.5/10): 2,3
+Ingrese la calificacion de AA (3.0/10): 3
+
+=====================================================
+Estadisticas generales del curso:
+=====================================================
+Estudiante           Materia              Promedio   Estado     Cedula    
+Martin Martin        Fisica               7,10       Aprobado   100001    
+Alex Martin          Fisica               6,60       Reprobado  100002    
+Camila Rojas         Quimica              6,96       Reprobado  100003    
+Rocio Alba           Quimica              8,00       Aprobado   100004    
+Daniel Pintado       Fisica               8,30       Aprobado   100005    
+
+Total de Aprobados: 3
+Total de Aprobados con recuperacion: 0
+Total de Reprobados: 2
+
+BUILD SUCCESSFUL (total time: 4 minutes 17 seconds)
+
+ */
+
