@@ -7,24 +7,24 @@ public class MejorEgresado {
     public static void main(String[] args) {
         Scanner tcl = new Scanner(System.in);
         Random random = new Random();
-        double promedio, mejoregresado = 7;
-        int limite, cont;
-        String mejorestudiante = "";
+        double promedio, mejoregresado = 7; //promedio se genera aleatoriamente, el mejor egresado para saber cual es el promedio mas alto
+        int limite, cont; //limite de estudiantes generados
+        String mejorestudiante = ""; //para almacenar al mejor o los 2 mejores estudiantes
         System.out.print("Ingrese el numero de estudiantes: ");
         limite = tcl.nextInt();
         for (cont = 1; cont <= limite; cont++) {
-            promedio = 7 + (10 - 7) * random.nextDouble();
-            if (promedio > mejoregresado) {
-                mejoregresado = promedio;
-                mejorestudiante = "Estudiante " + cont;
-            } else if (promedio == mejoregresado) {
-                mejorestudiante += " y Estudiante" + cont;
+            promedio = 7 + (10 - 7) * random.nextDouble(); //generar aleatoriamente promedios del 7 al 10
+            if (promedio > mejoregresado) { // comparar el promedio mas alto
+                mejoregresado = promedio; //almacenar el mejor promedio
+                mejorestudiante = "Estudiante " + cont; //almacenar el contador del propietario del mejor promedio 
+            } else if (promedio == mejoregresado) { // comparar si existe otro mejor egresado
+                mejorestudiante += " y Estudiante" + cont; // almacenar el segundo mejor promedio y estudiante
             }
-            System.out.println("Estudiante " + cont + " - Promedio: " + String.format("%.2f", promedio));
+            System.out.println("Estudiante " + cont + " - Promedio: " + String.format("%.2f", promedio)); // imprimir los estudiantes y promedios
         }
         System.out.println("----------------------------------------------------");
-        System.out.println("El/los mejor(es) egresado(s): \n" + mejorestudiante);
-        System.out.println("Con un promedio de: \n" + String.format("%.2f", mejoregresado));
+        System.out.println("El/los mejor(es) egresado(s): \n" + mejorestudiante); // imprimir mejor egresado o mejores 2 egresados
+        System.out.println("Con un promedio de: \n" + String.format("%.2f", mejoregresado)); //imprimir el mejor promedio
         System.out.println("----------------------------------------------------");
     }
 }
