@@ -27,3 +27,11 @@ def main():
 # Ejecución principal
 if __name__ == "__main__":
     main()
+#Ingrese el número de estudiantes: 4
+#Estudiante 1 - Promedio: 8.19
+#Estudiante 2 - Promedio: 9.05
+#Estudiante 3 - Promedio: 8.22
+#Estudiante 4 - Promedio: 8.74
+#-------------------------------------------------
+#El/los mejor(es) egresado(s): Estudiante 2
+#Con un promedio de: 9.05
