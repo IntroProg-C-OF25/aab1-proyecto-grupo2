@@ -17,7 +17,9 @@ def main():
 
         print(f"Estudiante {cont} - Promedio: {promedio:.2f}")
 
+    print(f"-------------------------------------------------")
     print(f"El/los mejor(es) egresado(s): {mejorestudiante}")
     print(f"Con un promedio de: {mejoregresado:.2f}")
+    print(f"-------------------------------------------------")
     if __name__ == "__main__":
         main()
